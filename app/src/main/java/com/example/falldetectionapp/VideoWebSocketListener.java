@@ -5,17 +5,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Getter;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-@Data
+@Getter
 public class VideoWebSocketListener extends WebSocketListener {
-    private final String WEB_SOCKET_URL = "ws://localhost:10000/video";
-
     @Override
     public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
         Log.d("VideoSocket", "closed");
@@ -44,5 +41,6 @@ public class VideoWebSocketListener extends WebSocketListener {
     @Override
     public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
         Log.d("VideoSocket", "connected");
+        webSocket.send("receiver");
     }
 }
