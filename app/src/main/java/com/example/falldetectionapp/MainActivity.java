@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -20,6 +23,7 @@ import okio.ByteString;
 public class MainActivity extends AppCompatActivity {
     private WebSocket socket;
     private ImageView imageView;
+    private final JSONObject CONNECTION_INFO = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
                 Log.d("video", "connected");
-                webSocket.send("receiver");
+                try {
+                    CONNECTION_INFO.put("identifier", "receiver");
+                    CONNECTION_INFO.put("camera_id", "cam01");
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                webSocket.send(CONNECTION_INFO.toString());
             }
         });
     }
